@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Union Strike Vote</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Union Strike Vote</h2>
+    <div id="voteForm">
+      <label for="voterId">Employee ID:</label>
+      <input type="text" id="voterId" placeholder="e.g., EMP001">
+
+      <label for="optionSelect">Select your vote:</label>
+      <select id="optionSelect"></select>
+
+      <button id="submitVote">Submit Vote</button>
+      <div class="message" id="message"></div>
+    </div>
+  </div>
+
+  <script>
+    const electionId = 1; // You can change this dynamically later
+
+    async function loadOptions() {
+      const res = await fetch(`/api/elections/${electionId}`);
+      const election = await res.json();
+
+      const select = document.getElementById('optionSelect');
+      election.ballot_options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.id;
+        option.textContent = opt.label;
+        select.appendChild(option);
+      });
+    }
+
+    async function submitVote() {
+      const voterId = document.getElementById('voterId').value.trim();
+      const optionId = document.getElementById('optionSelect').value;
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = '';
+
+      if (!voterId) {
+        messageEl.textContent = 'Please enter your Employee ID.';
+        messageEl.style.color = 'red';
+        return;
+      }
+
+      const response = await fetch('/api/votes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          election_id: electionId,
+          ballot_option_id: optionId,
+          voter_identifier: voterId
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        messageEl.textContent = '✅ ' + data.message;
+        messageEl.style.color = 'green';
+      } else {
+        messageEl.textContent = '❌ ' + (data.message || 'Something went wrong.');
+        messageEl.style.color = 'red';
+      }
+    }
+
+    document.getElementById('submitVote').addEventListener('click', submitVote);
+
+    loadOptions();
+  </script>
+
+</body>
+</html>

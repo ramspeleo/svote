@@ -1,0 +1,20 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#6549
+    [34mall[39m: [
+      [34;4mApp\Models\Election[39;24m {#6533
+        [34mid[39m: [35m1[39m,
+        [34mtitle[39m: "[32mUnion Strike Vote[39m",
+        [34mstatus[39m: "[32mopen[39m",
+        [34mcompany_name[39m: "[32mABC Manufacturing[39m",
+        [34mcreated_at[39m: "[32m2025-10-30 06:23:44[39m",
+        [34mupdated_at[39m: "[32m2025-10-30 06:23:44[39m",
+        [34mballotOptions[39m: [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#6108
+          [34mall[39m: [
+            [34;4mApp\Models\BallotOption[39;24m {#6545 …5},
+            [34;4mApp\Models\BallotOption[39;24m {#6109 …5},
+            [34;4mApp\Models\BallotOption[39;24m {#6110 …5},
+          ],
+        },
+      },
+    ],
+  }
+
